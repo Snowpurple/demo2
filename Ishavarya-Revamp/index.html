@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>ISHAVARYA | Image Quality Test</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        
+        body {
+            margin: 0;
+            padding: 32px 16px;
+            font-family: Arial, sans-serif;
+            background: #faf7f2;
+            color: #4b2b1b;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+        
+        h1 {
+            color: #A6512A;
+            letter-spacing: 3px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: auto;
+        }
+        
+        .image-card {
+            background: white;
+            border: 1px solid #ead9c8;
+            border-radius: 12px;
+            padding: 24px;
+            margin-bottom: 24px;
+            text-align: center;
+        }
+        
+        .image-stage {
+            background-color: #f5eee5;
+            background-image: linear-gradient(45deg, #e5ddd3 25%, transparent 25%), linear-gradient(-45deg, #e5ddd3 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #e5ddd3 75%), linear-gradient(-45deg, transparent 75%, #e5ddd3 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0;
+            border-radius: 8px;
+            min-height: 280px;
+            display: grid;
+            place-items: center;
+            padding: 20px;
+            overflow: hidden;
+        }
+        
+        .logo {
+            display: block;
+            width: min(100%, 320px);
+            height: auto;
+            object-fit: contain;
+        }
+        
+        .status {
+            margin-top: 16px;
+            padding: 12px;
+            border-radius: 6px;
+            background: #f6f0e8;
+            overflow-wrap: anywhere;
+            text-align: left;
+            line-height: 1.7;
+        }
+        
+        .success {
+            color: #216e39;
+        }
+        
+        .error {
+            color: #b42318;
+        }
+        
+        .test-image {
+            max-width: 100%;
+            height: auto;
+        }
+        
+        button {
+            background: #A6512A;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 12px;
+        }
+        
+        button:hover {
+            background: #7f3b1d;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 32px;
+            color: #806b5c;
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <header>
+            <h1>ISHAVARYA</h1>
+            <p>Image Quality & Deployment Test</p>
+        </header>
+
+        <section class="image-card">
+            <h2>Logo Preview</h2>
+
+            <div class="image-stage">
+                <img id="logo" class="logo" src="./Divya_mandir.avif" alt="ISHAVARYA sacred diya logo" />
+            </div>
+
+            <div id="status" class="status" aria-live="polite">
+                Checking image...
+            </div>
+
+            <button onclick="checkImage()">
+        Test Image Again
+      </button>
+        </section>
+
+        <section class="image-card">
+            <h2>Full-Size Image Preview</h2>
+            <p>Check sharpness and details at the image's natural size.</p>
+
+            <img id="fullImage" class="test-image" src="./Diwali.avif" alt="Full-size ISHAVARYA logo" style="max-width: 100%; width: 500px;" />
+        </section>
+
+        <section class="image-card">
+            <h2>Deployment Checklist</h2>
+            <p>✓ Image loads without a broken-image icon</p>
+            <p>✓ Logo looks sharp and proportions are preserved</p>
+            <p>✓ Transparent background displays correctly</p>
+            <p>✓ Image fits on mobile and desktop screens</p>
+            <p>✓ Image loads on the deployed website</p>
+        </section>
+
+        <footer>
+            ISHAVARYA · Crafted with devotion
+        </footer>
+    </div>
+
+    <script>
+        function checkImage() {
+            const img = document.getElementById("logo");
+            const status = document.getElementById("status");
+
+            status.className = "status";
+
+            if (img.complete && img.naturalWidth > 0) {
+                status.innerHTML = `
+          <span class="success">
+            ✓ Image loaded successfully!
+          </span><br>
+          Natural width: ${img.naturalWidth}px<br>
+          Natural height: ${img.naturalHeight}px<br>
+          File format: PNG (expected)<br>
+          Display width: ${Math.round(
+            img.getBoundingClientRect().width
+          )}px
+        `;
+            } else {
+                status.innerHTML = `
+          <span class="error">
+            ✗ Image failed to load.
+          </span><br>
+          Check the image filename, folder path,
+          and capitalization.
+        `;
+                status.className = "status error";
+            }
+        }
+
+        document.getElementById("logo").addEventListener(
+            "load",
+            checkImage
+        );
+
+        document.getElementById("logo").addEventListener(
+            "error",
+            checkImage
+        );
+
+        window.addEventListener("resize", () => {
+            if (document.getElementById("logo").naturalWidth > 0) {
+                checkImage();
+            }
+        });
+
+        checkImage();
+    </script>
+</body>
+
+</html>
